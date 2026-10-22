@@ -1,0 +1,19 @@
+{
+  "comparison": "Hessian minus magnitude, test accuracy, 90% target",
+  "pairs": [
+    {
+      "seed": 0,
+      "test_accuracy_difference": 0.01997332300675536
+    },
+    {
+      "seed": 1,
+      "test_accuracy_difference": 0.14217976851254244
+    },
+    {
+      "seed": 2,
+      "test_accuracy_difference": 0.15225678757368444
+    }
+  ],
+  "mean_difference": 0.10480329303099407,
+  "sd_difference": 0.07363748664250148
+}

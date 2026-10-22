@@ -1,0 +1,13 @@
+{
+  "new_models_verified": 18,
+  "previous_models_reused": 9,
+  "data_sha256": "0a9371cef7c964b5475d6053cc3e0894a5aa6f65ad1ed3ecb01c45aa96217945",
+  "training_source_sha256": "f00c7cad40bbf6873f27557703af716372a992d8e4a2074c624166ef3491e5b5",
+  "reporting_source_sha256": "f00c7cad40bbf6873f27557703af716372a992d8e4a2074c624166ef3491e5b5",
+  "same_pre_pruning_history": true,
+  "masks_and_budget_checked": true,
+  "dense_sparse_logits_match": true,
+  "prior_90_percent_test_results_observed": true,
+  "report_only_recovery": false,
+  "reporting_seconds": 377.61085874999844
+}

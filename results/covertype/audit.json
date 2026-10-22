@@ -1,0 +1,10 @@
+{
+  "verified_models": 9,
+  "sparse_dense_logits_match": true,
+  "reload_metrics_match": true,
+  "masks_and_budget_checked": true,
+  "pre_pruning_histories_match": true,
+  "test_used_for_selection": false,
+  "source_sha256": "f00c7cad40bbf6873f27557703af716372a992d8e4a2074c624166ef3491e5b5",
+  "elapsed_seconds": 180.60661754199828
+}
