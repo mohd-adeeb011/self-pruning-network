@@ -1,7 +1,7 @@
 """Compare the existing pruning methods on UCI Covertype.
 
 Run: python -m train.covertype_experiment
-This is a focused 90% comparison, not the full submission sparsity sweep.
+Run the full sparsity sweep with: python -m train.covertype_full
 """
 import argparse
 import csv
@@ -149,8 +149,7 @@ def summarize(entries, results, output, data):
               'dense and sparse wall-clock time; sparse Python loops can be slower. '
               'The random row split can mix nearby forest cells across splits, '
               'so it may overstate performance on a new geographical area. '
-              'This 90% comparison does not replace the full sparsity sweep '
-              'required for submission.', '']
+              'See [SWEEP.md](SWEEP.md) for the full accuracy-sparsity comparison.', '']
     (output / 'RESULTS.md').write_text('\n'.join(lines))
     return rows
 

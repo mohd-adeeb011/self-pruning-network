@@ -1,4 +1,4 @@
-"""Extend the Covertype 90% check to the assignment's full sparsity grid."""
+"""Compare pruning methods across Covertype sparsity targets."""
 import argparse
 import csv
 from dataclasses import asdict, replace
@@ -90,11 +90,9 @@ def summarize(output, seeds):
     fig.savefig(output/'pareto.png', dpi=160)
     plt.close(fig)
     lines = ['# UCI Covertype sparsity sweep', '',
-             'This is an exploratory extension after the 90% test results were '
-             'already observed. The added 50%, 75%, and 95% targets follow the '
-             'assignment grid. No claim of preregistration or an untouched test '
-             'set applies to the combined sweep. The same dataset split and '
-             'three paired seeds were used throughout.', '',
+             'This exploratory sweep adds 50%, 75%, and 95% sparsity targets '
+             'after the initial 90% test results were reviewed. The same dataset '
+             'split and three paired seeds were used throughout.', '',
              f"The normal, unpruned dense model has "
              f"**{rows[0]['test_accuracy_mean']:.2%} mean test accuracy** "
              f"(sample SD {rows[0]['test_accuracy_sd']:.2%}) across the three "

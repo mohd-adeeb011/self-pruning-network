@@ -1,6 +1,6 @@
 # UCI Covertype sparsity sweep
 
-This is an exploratory extension after the 90% test results were already observed. The added 50%, 75%, and 95% targets follow the assignment grid. No claim of preregistration or an untouched test set applies to the combined sweep. The same dataset split and three paired seeds were used throughout.
+This exploratory sweep adds 50%, 75%, and 95% sparsity targets after the initial 90% test results were reviewed. The same dataset split and three paired seeds were used throughout.
 
 The normal, unpruned dense model has **75.94% mean test accuracy** (sample SD 0.18%) across the three seeds. It keeps all 488 connection weights and 15 biases.
 

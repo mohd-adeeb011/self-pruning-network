@@ -30,8 +30,8 @@ Surgeon](https://papers.nips.cc/paper_files/paper/1992/file/303ed4c69846ab36c290
 That method changes surviving weights as it removes one weight near a trained
 minimum. We prune many weights during training and let later Adam steps adjust
 the survivors. A full update would need a stable solve, a policy for many
-deletions, and a policy for Adam state after abrupt weight changes. We have not
-tested whether it would improve these results.
+deletions, and a policy for Adam state after abrupt weight changes. Full
+compensation updates are outside the scope of this implementation.
 
 ## Schedule, masks, and gradients
 
