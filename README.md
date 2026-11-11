@@ -1,7 +1,7 @@
 # Self-Pruning Neural Network
 
-A personal project that explores Hessian-guided pruning of small neural networks
-during training. It uses gradient and curvature information to rank connections,
+Hessian-guided pruning of small neural networks during training. The method
+uses gradient and curvature information to rank connections,
 then removes low-scoring weights under a target sparsity budget.
 
 Built with Python and NumPy, the project includes a custom reverse-mode autodiff
@@ -10,32 +10,79 @@ Experiments compare Hessian-guided pruning with magnitude pruning and a dense
 baseline on the [UCI Covertype dataset](https://archive.ics.uci.edu/dataset/31/covertype).
 The original 11 MB data archive is included in `data/` so a clone can run offline.
 
-## Run it
+## Install
 
-Use Python 3.10 or newer. Run these commands from the repository root:
+Use Python 3.10 or newer. Clone the repository and install its dependencies:
 
 ```sh
+git clone https://github.com/mohd-adeeb011/self-pruning-network.git
+cd self-pruning-network
 python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install -r requirements.txt
+```
 
-# Check gradients, then run the full test suite
-python -m pytest tests/test_engine.py -q
+On Windows PowerShell, activate with `.venv\Scripts\Activate.ps1` instead.
+Run all remaining commands from the repository root with this environment active.
+
+## Train and compare
+
+Start with the small synthetic two-moons dataset:
+
+```sh
 python -m pytest -q
+python -m train.run --dataset moons --method dense --out runs/dense
+python -m train.run --dataset moons --method magnitude --sparsity 0.9 --out runs/magnitude
+python -m train.run --dataset moons --method hessian --sparsity 0.9 --out runs/pruned
+```
 
-# Train a dense classifier and save a learning curve
-python -m train.run --method dense --out results/dense
+`--sparsity 0.9` removes at least 90% of connection weights; biases stay active.
+Each output folder contains `metrics.json`, `model.npz`, and `learning.png`.
+New runs go under `runs/`, which Git ignores. Use `python -m train.run --help`
+to see options for the seed, model width, epochs, batch size, and pruning schedule.
 
-# Train while pruning and save a learning curve
-python -m train.run --method hessian --sparsity 0.9 --out results/pruned
+To reproduce the Covertype benchmark in a separate output folder, run both
+commands in order:
 
-# Reproduce the Covertype sparsity sweep and plot
-python -m train.covertype_full
+```sh
+python -m train.covertype_experiment --out runs/covertype
+python -m train.covertype_sweep --out runs/covertype
 ```
 
 The core uses only Python and NumPy. Matplotlib makes plots; pytest runs tests.
-The full Covertype command trains 27 models and takes several minutes. It writes
-the full curve to `results/covertype/`.
+The full Covertype benchmark trains 27 models and takes several minutes,
+depending on hardware. It saves the sparsity curve, CSV summaries, and per-seed
+models under `runs/covertype/`. Published results are in `results/covertype/`.
+
+## Predict with a saved model
+
+For the two-feature model trained above, load its weights and preprocessing:
+
+```python
+import numpy as np
+from train.run import load_model
+from prune.inference import SparseExport
+
+model, (mean, scale) = load_model("runs/pruned/model.npz")
+raw_features = np.array([[0.1, 0.2], [1.0, 0.5]])
+features = (raw_features - mean) / scale
+labels = SparseExport(model)(features).argmax(axis=1)
+print(labels)
+```
+
+Supply feature columns in the same order as training. Predictions are zero-based
+class indices. The sparse export skips removed connections, but the measured
+Python implementation is slower than dense inference on this small model.
+
+## Use your own dataset
+
+Add a loader in [train/data.py](train/data.py), then register its name in
+`Config.validate()` and the CLI dataset choices in [train/run.py](train/run.py).
+Return `train`, `val`, and `test` as `(X, y)` pairs, with 2D feature arrays and
+integer labels from `0` to `number_of_classes - 1`. Also return `normalization`
+as `(mean, scale)`, fitted on training rows only. Apply that normalization to
+all three splits before returning them. This implementation works with the
+NumPy MLP defined in this repository.
 
 ## Measured results
 
@@ -120,3 +167,8 @@ Hessian calculation, cost, and serving limits. The full Hessian is computed, but
 only its diagonal and a global stability shift affect ranking. We do not make
 an Optimal Brain Surgeon compensation update. The test suite checks finite
 differences, broadcasting, mask transitions, and saved-model behavior.
+
+## License
+
+A code license has not yet been selected. The included Covertype dataset has
+separate [CC BY 4.0 terms and attribution](data/README.md).
